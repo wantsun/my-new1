@@ -18,6 +18,7 @@ export default function NewsAdd() {
     const handleNext = () => {
        if(current===0){
         NewsForm.current.validateFields().then(res=>{
+            console.log(res)
             setformInfo(res)
             setCurrent(current + 1)
         }).catch(error=>{

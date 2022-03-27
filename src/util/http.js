@@ -1,6 +1,6 @@
 import axios from 'axios'
 import {store} from '../redux/store'
-axios.defaults.baseURL="http://localhost:8000"
+axios.defaults.baseURL="http://localhost:8000/api"
 
 // axios.defaults.headers
 

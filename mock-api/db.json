@@ -130,7 +130,8 @@
         "/publish-manage",
         "/publish-manage/unpublished",
         "/publish-manage/published",
-        "/publish-manage/sunset"
+        "/publish-manage/sunset",
+        "/right-manage/role/list"
       ]
     },
     {
@@ -150,7 +151,8 @@
         "/publish-manage",
         "/publish-manage/unpublished",
         "/publish-manage/published",
-        "/publish-manage/sunset"
+        "/publish-manage/sunset",
+        "/right-manage/role/list"
       ]
     }
   ],
@@ -468,7 +470,7 @@
       "author": "admin",
       "roleId": 1,
       "auditState": 2,
-      "publishState": 2,
+      "publishState": 3,
       "createTime": 1645581568272,
       "star": 0,
       "view": 0,
@@ -901,7 +903,7 @@
       "region": "中国",
       "author": "admin",
       "roleId": 1,
-      "auditState": 1,
+      "auditState": 3,
       "publishState": 0,
       "createTime": 1645767358918,
       "star": 0,

@@ -168,6 +168,7 @@ export default function UserList() {
         }
         axios.get("/users?_expand=role").then(res => {
             const list = res.data
+            console.log(list);
             setdataSource(roleObj[roleId]==="superadmin"?list:[
                 ...list.filter(item=>item.username===username),
                 ...list.filter(item=>item.region===region&& roleObj[item.roleId]==="editor")

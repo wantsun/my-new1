@@ -13,6 +13,7 @@ export default function Audit() {
         }
         axios.get(`/news?auditState=1&_expand=category`).then(res => {
             const list = res.data
+            console.log("auditState=1",list)
             setdataSource(
                 roleObj[roleId] === "superadmin"
                     ? list
