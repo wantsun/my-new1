@@ -1,6 +1,6 @@
 import axios from 'axios'
 import {store} from '../redux/store'
-axios.defaults.baseURL="http://localhost:8000/api"
+axios.defaults.baseURL="https://wantsun.herokuapp.com/api"
 
 // axios.defaults.headers
 
