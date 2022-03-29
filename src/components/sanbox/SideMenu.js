@@ -3,7 +3,7 @@ import { Layout, Menu } from 'antd';
 import './SideMenu.css';
 import { UserOutlined,HomeOutlined,RightSquareOutlined,OrderedListOutlined } from '@ant-design/icons';
 import { useNavigate, useLocation } from "react-router-dom";
-import axios from "axios";
+import $http from "../../util/http";
 import {connect} from 'react-redux';
 const { SubMenu } = Menu;
 const { Sider } = Layout;
@@ -22,13 +22,13 @@ const iconList = {
  function SideMenu(props) {
   const [meus, setMeun] = useState([]);
   useEffect(() => {
-    axios.get("/rights?_embed=children").then(res => {
+    $http.get("/rights?_embed=children").then(res => {
       console.log(res.data)
       setMeun(res.data)
     })
   }, [])
 
-  const {role:{rights}} = JSON.parse(localStorage.getItem("token"))
+  const {role:{rights}} = JSON.parse(localStorage.getItem("token")||'')
 
   const checkPagePermission = (item)=>{
     return item.pagepermisson && rights.includes(item.key)

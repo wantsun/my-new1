@@ -1,4 +1,4 @@
-import axios from "axios";
+import $http from "../../../util/http";
 import React, { useState, useEffect } from 'react';
 import { Table, Button, Modal,Tree } from 'antd';
 import { DeleteOutlined, EditOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
@@ -39,14 +39,14 @@ export default function RoleList() {
     ]
 
     useEffect(() => {
-        axios.get("/roles").then((res) => {
+        $http.get("/roles").then((res) => {
             setDataSource(res.data);
             console.log("dataSource",res.data)
         });
     }, [refresh]);
 
     useEffect(() => {
-        axios.get("/rights?_embed=children").then(res => {
+        $http.get("/rights?_embed=children").then(res => {
             setRightList(res.data)
             console.log("rightList",res.data)
         })
@@ -68,7 +68,7 @@ export default function RoleList() {
     };
 
     const deleteMethod = (item) => {
-        axios.delete(`/roles/${item.id}`)
+        $http.delete(`/roles/${item.id}`)
             .then(setRefresh)
             .catch((e) => console.log(e))
     }
@@ -77,7 +77,7 @@ export default function RoleList() {
 
     const handleOk = ()=>{
         setisModalVisible(false);
-        axios.patch(`/roles/${currentID}`,{
+        $http.patch(`/roles/${currentID}`,{
             rights:currentRights.checked
         })
             .then(setRefresh)

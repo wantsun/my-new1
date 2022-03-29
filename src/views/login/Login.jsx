@@ -4,23 +4,23 @@ import "./Login.css"
 import { Form, Input, Button, message } from 'antd';
 import {useNavigate}from 'react-router-dom';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import axios from 'axios';
-
+import $http from '../../util/http';
+import Auth from '../../router/Auth'
 
 
 export default function Login() {
     let navigate=useNavigate();
-
+    const { login, logout } = Auth()
     const onFinish = (values) => {
         console.log('Received values of form: ', values);
-        axios.get(`/users?username=${values.username}&password=${values.password}&roleState=true&_expand=role`).then(res=>{
+        $http.get(`/users?username=${values.username}&password=${values.password}&roleState=true&_expand=role`).then(res=>{
             console.log(res.data)
             if(res.data.length===0){
                 message.error("用户名或密码不匹配")
             }else{
-                localStorage.setItem("token",JSON.stringify(res.data[0]));
-                navigate("/home")
                 message.info('登录成功');
+                localStorage.setItem("token",JSON.stringify(res.data[0]));
+                navigate("/home");
             }
         })
     };
@@ -54,7 +54,7 @@ export default function Login() {
                 </Form.Item>
 
                 <Form.Item>
-                    <Button type="primary" htmlType="submit" className="login-form-button">
+                    <Button type="primary" htmlType="submit" className="login-form-button" autocomplet="on"  onClick={() => login()}>
                         Log in
         </Button>
                 </Form.Item>

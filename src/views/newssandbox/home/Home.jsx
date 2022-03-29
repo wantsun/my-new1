@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react'
 import { Card, Col, Row, List, Avatar, Drawer, Button } from 'antd';
 import { EditOutlined, EllipsisOutlined, SettingOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom'
-import axios from 'axios'
+import $http from '../../../util/http'
 import * as Echarts from 'echarts'
 import _ from 'lodash'
 
@@ -18,21 +18,21 @@ export default function Home() {
     const pieRef = useRef()
     const Navigate = useNavigate();
     useEffect(() => {
-        axios.get("/news?publishState=2&_expand=category&_sort=view&_order=desc&_limit=6").then(res => {
+        $http.get("/news?publishState=2&_expand=category&_sort=view&_order=desc&_limit=6").then(res => {
 
             setviewList(res.data)
         })
     }, [])
 
     useEffect(() => {
-        axios.get("/news?publishState=2&_expand=category&_sort=star&_order=desc&_limit=6").then(res => {
+        $http.get("/news?publishState=2&_expand=category&_sort=star&_order=desc&_limit=6").then(res => {
             setstarList(res.data)
         })
     }, [])
 
     useEffect(() => {
 
-        axios.get("/news?publishState=2&_expand=category").then(res => {
+        $http.get("/news?publishState=2&_expand=category").then(res => {
             // console.log(res.data)
             // console.log()
             renderBarView(_.groupBy(res.data, item => item.category.title))
@@ -200,7 +200,7 @@ export default function Home() {
         //     setActiveTabKey2(key);
         //   };
     
-    const { username, region, role: { roleName } } = JSON.parse(localStorage.getItem("token"))
+    const { username, region, role: { roleName } } = JSON.parse(localStorage.getItem("token")||'')
     return (
         <div className="site-card-wrapper">
             <Row gutter={16}>

@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react'
-import axios from 'axios'
+import $http from "../../util/http";
 import {notification} from 'antd'
 
 function usePublish(type){
@@ -8,7 +8,7 @@ function usePublish(type){
     const [dataSource, setdataSource] = useState([])
     useEffect(() => {
 
-        axios(`/news?author=${username}&publishState=${type}&_expand=category`).then(res=>{
+        $http(`/news?author=${username}&publishState=${type}&_expand=category`).then(res=>{
             // console.log(res.data)
             setdataSource(res.data)
         })
@@ -19,7 +19,7 @@ function usePublish(type){
     const handlePublish = (id)=>{
         setdataSource(dataSource.filter(item=>item.id!==id))
 
-        axios.patch(`/news/${id}`, {
+        $http.patch(`/news/${id}`, {
             "publishState": 2,
             "publishTime":Date.now()
         }).then(res=>{
@@ -35,7 +35,7 @@ function usePublish(type){
     const handleSunset = (id)=>{
         setdataSource(dataSource.filter(item=>item.id!==id))
 
-        axios.patch(`/news/${id}`, {
+        $http.patch(`/news/${id}`, {
             "publishState": 3,
         }).then(res=>{
             notification.info({
@@ -50,7 +50,7 @@ function usePublish(type){
     const handleDelete = (id)=>{
         setdataSource(dataSource.filter(item=>item.id!==id))
 
-        axios.delete(`/news/${id}`).then(res=>{
+        $http.delete(`/news/${id}`).then(res=>{
             notification.info({
                 message: `通知`,
                 description:

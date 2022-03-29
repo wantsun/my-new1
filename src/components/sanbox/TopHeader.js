@@ -20,7 +20,7 @@ const { Header } = Layout;
     props.changeCollapsed()
   }
 
-  const {role:{roleName},username} = JSON.parse(localStorage.getItem("token"));
+  const {role:{roleName},username} = JSON.parse(localStorage.getItem("token")||'');
   let navigate=useNavigate();
 
   const menu = (

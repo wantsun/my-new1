@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import {Table,Button,Tag,notification} from 'antd'
 import {useNavigate} from 'react-router-dom'
-import axios from 'axios'
+import $http from '../../../util/http'
 export default function AuditList(props) {
     const [dataSource, setdataSource] = useState([])
     const [refresh, setRefresh] = useState(false);
     const {username} = JSON.parse(localStorage.getItem("token"))
     const Navigate=useNavigate();
     useEffect(()=>{
-        axios(`/news?author=${username}&auditState_ne=0&publishState_lte=1&_expand=category`).then(res=>{
+        $http(`/news?author=${username}&auditState_ne=0&publishState_lte=1&_expand=category`).then(res=>{
             setdataSource(res.data)
         }).then(setRefresh)
     },[username,refresh])
@@ -63,7 +63,7 @@ export default function AuditList(props) {
     const handleRervert = (item)=>{
         // setdataSource(dataSource.filter(data=>data.id!==item.id))
 
-        axios.patch(`/news/${item.id}`,{
+        $http.patch(`/news/${item.id}`,{
             auditState:0
         }).then(setRefresh).then(res=>{
             notification.info({
@@ -81,7 +81,7 @@ export default function AuditList(props) {
     }
 
     const handlePublish = (item)=>{
-        axios.patch(`/news/${item.id}`, {
+        $http.patch(`/news/${item.id}`, {
             "publishState": 2,
             "publishTime":Date.now()
         }).then(setRefresh).then(res=>{

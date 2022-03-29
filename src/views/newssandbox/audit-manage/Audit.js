@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
+import $http from '../../../util/http'
 import { Table, Button, notification } from 'antd'
 
 export default function Audit() {
@@ -11,7 +11,7 @@ export default function Audit() {
             "2": "admin",
             "3": "editor"
         }
-        axios.get(`/news?auditState=1&_expand=category`).then(res => {
+        $http.get(`/news?auditState=1&_expand=category`).then(res => {
             const list = res.data
             console.log("auditState=1",list)
             setdataSource(
@@ -63,7 +63,7 @@ export default function Audit() {
     const handleAudit = (item, auditState, publishState) => {
         setdataSource(dataSource.filter(data => data.id !== item.id))
 
-        axios.patch(`/news/${item.id}`, {
+        $http.patch(`/news/${item.id}`, {
             auditState,
             publishState
         }).then(res => {

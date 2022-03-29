@@ -13,7 +13,7 @@ import Unpublished from '../../views/newssandbox/publish-manage/Unpublished'
 import Published from '../../views/newssandbox/publish-manage/Published'
 import Sunset from '../../views/newssandbox/publish-manage/Sunset'
 import NewsPreview from '../../views/newssandbox/news-manage/NewsPreview'
-import axios from "axios";
+import $http from "../../util/http";
 import { Routes, Route, Navigate } from 'react-router-dom'
 import NewsUpdate from '../../views/newssandbox/news-manage/NewsUpdate'
 import {Spin } from 'antd'
@@ -50,8 +50,8 @@ function NewsRouter(props) {
 
     useEffect(() => {
         Promise.all([
-            axios.get("/rights"),
-            axios.get("/children"),
+            $http.get("/rights"),
+            $http.get("/children"),
         ]).then((res) => {
             setbackRouteList([...res[0].data, ...res[1].data]);
         });

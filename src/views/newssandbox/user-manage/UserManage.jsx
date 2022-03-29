@@ -1,146 +1,9 @@
-// import React, { useState, useEffect } from 'react';
-// import axios from "axios";
-// import { Table, Button, Modal, Form, Input, Switch, Select } from 'antd';
-// import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-// import UserForm from "../../../components/user-mange/UserForm";
 
-// const { Option } = Select;
-
-// export default function UserManage() {
-
-//     const [dataSource, setDataSource] = useState([]);
-//     const [refresh, setRefresh] = useState(false);
-//     const [visible, setVisible] = useState(false);
-//     const [roleList, setroleList] = useState([])
-//     const [regionList, setregionList] = useState([])
-
-
-//     const [form] = Form.useForm();
-
-//     const onCreate = (values) => {
-//         console.log('Received values of form: ', values);
-//         setVisible(false);
-//     };
-
-//     useEffect(() => {
-//         axios.get("/users?_expand=role").then((res) => {
-//             setDataSource(res.data);
-//         });
-//     }, [refresh]);
-
-//     useEffect(() => {
-//         axios.get("/regions").then(res => {
-//             setregionList(res.data)
-//         })
-//     }, [])
-
-//     useEffect(() => {
-//         axios.get("/roles").then(res => {
-//             setroleList(res.data)
-//         })
-//     }, [])
-
-
-//     function handleChange(value) {
-//         console.log(`selected ${value}`);
-//     }
-
-//     const columns = [
-//         {
-//             title: "区域",
-//             dataIndex: "region",
-//             render: (region) => {
-//                 return <b>{region === "" ? '中国' : region}</b>;
-//             },
-//         },
-//         {
-//             title: "角色名称",
-//             dataIndex: "role",
-//             render: (role) => {
-//                 return role.roleName;
-//             }
-//         },
-//         {
-//             title: "用户名",
-//             dataIndex: "username",
-//         },
-//         {
-//             title: "用户状态",
-//             dataIndex: 'roleState',
-//             render: (roleState, item) => {
-//                 return <Switch checked={roleState} disabled={item.default}></Switch>
-//             }
-//         },
-//         {
-//             title: "操作",
-//             render: (item) => {
-//                 return (
-//                     <div>
-//                         <Button
-//                             danger
-//                             shape="circle"
-//                             icon={<DeleteOutlined />}
-//                             style={{ marginRight: 10 }}
-//                             disabled={item.default}
-
-//                         />
-//                         <Button type="primary" shape="circle" icon={<EditOutlined />}
-//                             disabled={item.default}
-
-//                         />
-
-
-//                     </div>
-//                 );
-//             },
-//         },
-//     ];
-
-//     return (
-//         <div>
-//             <Button type="primary"
-//                 onClick={() => {
-//                     setVisible(true)
-//                 }}
-//             >添加用户</Button>
-//             <Table dataSource={dataSource} columns={columns}
-//                 pagination={{
-//                     pageSize: 5
-//                 }}
-//                 rowKey={item => item.id}
-//             />
-
-//             <Modal
-//                 visible={visible}
-//                 title="添加用户"
-//                 okText="Create"
-//                 cancelText="Cancel"
-//                 onCancel={() => {
-//                     setVisible(false)
-//                 }}
-//                 onOk={() => {
-//                     form
-//                         .validateFields()
-//                         .then(values => {
-//                             form.resetFields();
-//                             onCreate(values);
-//                         })
-//                         .catch(info => {
-//                             console.log('Validate Failed:', info);
-//                         });
-//                 }}
-//             >
-//                 <UserForm regionList={regionList} roleList={roleList}/>
-//             </Modal>
-//         </div>
-//     )
-
-// }
 
 
 import React, { useState, useEffect, useRef } from 'react'
 import { Button, Table, Modal, Switch} from 'antd'
-import axios from 'axios'
+import $http from '../../../util/http'
 import { DeleteOutlined, EditOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import UserForm from '../../../components/user-mange/UserForm';
 const { confirm } = Modal
@@ -166,7 +29,7 @@ export default function UserList() {
             "2":"admin",
             "3":"editor"
         }
-        axios.get("/users?_expand=role").then(res => {
+        $http.get("/users?_expand=role").then(res => {
             const list = res.data
             console.log(list);
             setdataSource(roleObj[roleId]==="superadmin"?list:[
@@ -177,14 +40,14 @@ export default function UserList() {
     }, [refresh,roleId,region,username])
 
     useEffect(() => {
-        axios.get("/regions").then(res => {
+        $http.get("/regions").then(res => {
             const list = res.data
             setregionList(list)
         })
     }, [refresh])
 
     useEffect(() => {
-        axios.get("/roles").then(res => {
+        $http.get("/roles").then(res => {
             const list = res.data
             setroleList(list)
         })
@@ -268,7 +131,7 @@ export default function UserList() {
         item.roleState = !item.roleState
         setdataSource([...dataSource])
 
-        axios.patch(`/users/${item.id}`,{
+        $http.patch(`/users/${item.id}`,{
             roleState:item.roleState
         })
     }
@@ -294,7 +157,7 @@ export default function UserList() {
         // 当前页面同步状态 + 后端同步
         // setdataSource(dataSource.filter(data=>data.id!==item.id))
 
-        axios.delete(`/users/${item.id}`).then(setRefresh)
+        $http.delete(`/users/${item.id}`).then(setRefresh)
         .catch((e) => console.log(e))
     }
 
@@ -306,7 +169,7 @@ export default function UserList() {
 
             addForm.current.resetFields()
             //post到后端，生成id，再设置 datasource, 方便后面的删除和更新
-            axios.post(`/users`, {
+            $http.post(`/users`, {
                 ...value,
                 "roleState": true,
                 "default": false,
@@ -319,7 +182,7 @@ export default function UserList() {
         updateForm.current.validateFields().then(value => {
             setisUpdateVisible(false)
             setisUpdateDisabled(!isUpdateDisabled)
-            axios.patch(`/users/${current.id}`,value).then(setRefresh)
+            $http.patch(`/users/${current.id}`,value).then(setRefresh)
             .catch((e) => console.log(e))
         })
     }

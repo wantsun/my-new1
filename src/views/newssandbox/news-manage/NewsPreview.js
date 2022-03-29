@@ -2,14 +2,14 @@ import React,{useEffect, useState,} from 'react'
 import { PageHeader,  Descriptions } from 'antd';
 import  {useParams}from 'react-router';
 import moment from 'moment'
-import axios from 'axios';
+import $http from '../../../util/http';
 
 export default function NewsPreview() {
     const {id}=useParams();
     console.log(id)
     const [newsInfo, setnewsInfo] = useState(null)
     useEffect(()=>{
-        axios.get(`/news/${id}?_expand=category&_expand=role`).then(res=>{
+        $http.get(`/news/${id}?_expand=category&_expand=role`).then(res=>{
             setnewsInfo(res.data)
         })
     },[id])

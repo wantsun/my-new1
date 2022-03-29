@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { PageHeader, Descriptions,notification } from 'antd';
 import { useParams } from "react-router";
 import moment from 'moment'
-import axios from 'axios';
+import $http from '../../util/http';
 import {LikeOutlined} from '@ant-design/icons'
 export default function Detail() {
     const [newsInfo, setnewsInfo] = useState(null);
@@ -11,8 +11,8 @@ export default function Detail() {
     let star = localStorage.getItem("star") || [];
     const params = useParams();
     useEffect(() => {
-        // console.log()
-        axios.get(`/news/${params.id}?_expand=category&_expand=role`).then(res => {
+       
+        $http.get(`/news/${params.id}?_expand=category&_expand=role`).then(res => {
             setnewsInfo({
                 ...res.data,
                 view:res.data.view+1
@@ -21,25 +21,16 @@ export default function Detail() {
             //同步后端
             return res.data
         }).then(res=>{
-            axios.patch(`/news/${params.id}`,{
+            $http.patch(`/news/${params.id}`,{
                 view:res.view+1
             })
         })
     }, [params.id,refresh])
-    // const handleStar = ()=>{
-    //     setnewsInfo({
-    //         ...newsInfo,
-    //         star:newsInfo.star+1
-    //     })
-    //     setLike({like:true});
-    //     axios.patch(`/news/${params.id}`,{
-    //         star:newsInfo.star+1
-    //     })
-    // }
+   
     const handleStar = () => {
         setLike({like:true});
         if (!star.includes(params.id.toString())) {
-            axios.patch(`/news/${params.id}`,{
+            $http.patch(`/news/${params.id}`,{
                         star:newsInfo.star+1
                     })
             .then(() => {

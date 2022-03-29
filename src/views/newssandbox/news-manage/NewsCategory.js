@@ -1,6 +1,6 @@
 import React, { useState, useEffect,useRef,useContext } from 'react'
 import { Button, Table, Modal,Form,Input } from 'antd'
-import axios from 'axios'
+import $http from '../../../util/http'
 import { DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons'
 const { confirm } = Modal
 export default function NewsCategory() {
@@ -8,7 +8,7 @@ export default function NewsCategory() {
     const [refresh, setRefresh] = useState(false);
 
     useEffect(() => {
-        axios.get("/categories").then(res => {
+        $http.get("/categories").then(res => {
             setdataSource(res.data)
         })
     }, [refresh])
@@ -27,7 +27,7 @@ export default function NewsCategory() {
         //     return item
         // }))
 
-        axios.patch(`/categories/${record.id}`,{
+        $http.patch(`/categories/${record.id}`,{
             title:record.title,
             value:record.title
         }).then(setRefresh)
@@ -84,7 +84,7 @@ export default function NewsCategory() {
         // console.log(item)
         // 当前页面同步状态 + 后端同步
         // setdataSource(dataSource.filter(data => data.id !== item.id))
-        axios.delete(`/categories/${item.id}`).then(setRefresh)
+        $http.delete(`/categories/${item.id}`).then(setRefresh)
     }
 
     const EditableContext = React.createContext(null);

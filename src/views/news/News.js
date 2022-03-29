@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import axios from 'axios'
+import $http from '../../util/http'
 import _ from 'lodash'
 import { PageHeader,  Col, Row, List } from 'antd'
 import { Layout, Menu } from 'antd';
@@ -14,7 +14,7 @@ export default function News() {
     const [list, setlist] = useState([])
     const [number,setNumber]=useState(1);
     useEffect(() => {
-        axios.get("/news?publishState=2&_expand=category").then(res => {
+        $http.get("/news?publishState=2&_expand=category").then(res => {
             setlist(Object.entries(_.groupBy(res.data, item => item.category.title)))
         })
 

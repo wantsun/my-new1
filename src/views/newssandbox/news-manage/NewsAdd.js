@@ -2,7 +2,7 @@ import React, { useEffect, useState,useRef } from 'react'
 import { PageHeader, Steps, Button,Form, Input,Select, message,notification } from 'antd'
 import {useNavigate} from "react-router"
 import style from './News.module.css'
-import  axios from 'axios'
+import  $http from '../../../util/http'
 import NewsEditor from '../../../components/news-mange/NewsEditor';
 const { Step } = Steps;
 const { Option } = Select;
@@ -37,7 +37,7 @@ export default function NewsAdd() {
 
     const handleSave = (auditState) => {
 
-        axios.post('/news', {
+        $http.post('/news', {
             ...formInfo,
             "content": content,
             "region": User.region?User.region:"中国",
@@ -68,7 +68,7 @@ export default function NewsAdd() {
     const NewsForm=useRef(null);
 
     useEffect(()=>{
-        axios.get("/categories").then(res=>{
+        $http.get("/categories").then(res=>{
             setCategoryList(res.data)
         })
     },[])

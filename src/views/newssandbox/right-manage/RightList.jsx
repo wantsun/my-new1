@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from "axios";
+import $http from "../../../util/http";
 import { Table, Tag, Button, Modal, Popover, Switch } from 'antd';
 import { DeleteOutlined, EditOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 
@@ -11,7 +11,7 @@ export default function RightList() {
     const [refresh, setRefresh] = useState(false);
 
     useEffect(() => {
-        axios.get("/rights?_embed=children").then((res) => {
+        $http.get("/rights?_embed=children").then((res) => {
             res.data.forEach((item) =>
                 item.children?.length === 0 ? (item.children = "") : item.children
             );
@@ -82,11 +82,11 @@ export default function RightList() {
 
     const deleteMethod = (item) => {
         if (item.grade === 1) {
-            axios.delete(`/rights/${item.id}`)
+            $http.delete(`/rights/${item.id}`)
                 .then(setRefresh)
                 .catch((e) => console.log(e))
         } else {
-            axios.delete(`/children/${item.id}`)
+            $http.delete(`/children/${item.id}`)
                 .then(setRefresh)
                 .catch((e) => console.log(e))
         }
@@ -97,11 +97,11 @@ export default function RightList() {
         setDataSource([...dataSource]);
 
         if(item.grade===1){
-            axios.patch(`/rights/${item.id}`,{
+            $http.patch(`/rights/${item.id}`,{
                 pagepermisson:item.pagepermisson
             })
         }else{
-            axios.patch(`/children/${item.id}`,{
+            $http.patch(`/children/${item.id}`,{
                 pagepermisson:item.pagepermisson
             })
         }
